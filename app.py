@@ -52,7 +52,7 @@ QA_PATTERNS = [
         "response_func": lambda: (
             f"おかずシリーズは4週間ごとの水曜日に届くよ！\n"
             f"次の配達日は {get_next_okazu_delivery_date().strftime('%m月%d日（水）')} だよ。\n"
-            f"届いたら冷蔵庫に入れてね"
+            f"届いたら冷凍庫に入れてね"
         ),
     },
     {
