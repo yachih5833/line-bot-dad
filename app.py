@@ -6,7 +6,7 @@ LINE自動返信ボット - お父さん向け
 import os
 import re
 import traceback
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from flask import Flask, request, abort
 
 from linebot.v3 import WebhookHandler
@@ -22,25 +22,25 @@ from linebot.v3.messaging import (
 
 app = Flask(__name__)
 
-# 環境変数から設定を読み込み
 CHANNEL_ACCESS_TOKEN = os.environ.get("LINE_CHANNEL_ACCESS_TOKEN", "")
 CHANNEL_SECRET = os.environ.get("LINE_CHANNEL_SECRET", "")
 
 configuration = Configuration(access_token=CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
 
+JST = timezone(timedelta(hours=9))
 
 def get_next_okazu_delivery_date():
-    base_date = datetime(2025, 7, 22)
-    today = datetime.now()
+    base_date = datetime(2026, 7, 22, tzinfo=JST)
+    today = datetime.now(JST)
     days_diff = (today - base_date).days
     if days_diff < 0:
         return base_date
     cycles_passed = days_diff // 28
-    next_date = base_date + timedelta(days=(cycles_passed + 1) * 28)
     check_date = base_date + timedelta(days=cycles_passed * 28)
     if check_date.date() == today.date():
         return check_date
+    next_date = base_date + timedelta(days=(cycles_passed + 1) * 28)
     return next_date
 
 
